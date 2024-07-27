@@ -24,7 +24,7 @@ public class CSVWriter implements CustomFileWriter {
         newable = true;
     }
 
-    public void writeToFile(List<?> objects, String filePath) throws FileNotFoundException {
+    public void writeToFile(List<?> objects, String filePath) throws FileNotFoundException, ListOfObjectsIsEmptyException, IllegalFieldAccessException {
         if (objects.isEmpty())
             throw new ListOfObjectsIsEmptyException();
 

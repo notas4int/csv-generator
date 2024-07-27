@@ -11,14 +11,14 @@ public class CSVWriter {
      * Переменная перезаписи служит обозначением создания нового файла с новой информацией
      * или добавления информации в старый файл
      */
-    private final boolean rewritable;
+    private final boolean newable;
 
-    public CSVWriter(boolean rewritable) {
-        this.rewritable = rewritable;
+    public CSVWriter(boolean newable) {
+        this.newable = newable;
     }
 
     public CSVWriter() {
-        rewritable = true;
+        newable = true;
     }
 
     public void writeToFile(List<?> objects, String filePath) throws FileNotFoundException {
@@ -28,14 +28,14 @@ public class CSVWriter {
         File csvOutputFile = new File(filePath);
 
         // проверка, если не перезаписывается и файла не существует
-        if (!rewritable && !csvOutputFile.exists())
+        if (!newable && !csvOutputFile.exists())
             throw new FileNotFoundException();
 
         Field[] fields = objects.get(0).getClass().getDeclaredFields();
 
-        try (FileWriter pw = new FileWriter(csvOutputFile, !rewritable)) {
+        try (FileWriter pw = new FileWriter(csvOutputFile, !newable)) {
             // проверка добавления названия полей для перезаписи
-            if (rewritable) {
+            if (newable) {
                 String header = Arrays.stream(fields)
                         .map(Field::getName)
                         .collect(Collectors.joining(","));

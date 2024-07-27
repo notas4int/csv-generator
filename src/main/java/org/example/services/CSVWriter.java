@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CSVWriter {
+public class CSVWriter implements CustomFileWriter {
     /**
      * Переменная перезаписи служит обозначением создания нового файла с новой информацией
      * или добавления информации в старый файл

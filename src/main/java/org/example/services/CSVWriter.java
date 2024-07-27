@@ -1,5 +1,8 @@
 package org.example.services;
 
+import org.example.exceptions.IllegalFieldAccessException;
+import org.example.exceptions.ListOfObjectsIsEmptyException;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -23,7 +26,7 @@ public class CSVWriter {
 
     public void writeToFile(List<?> objects, String filePath) throws FileNotFoundException {
         if (objects.isEmpty())
-            throw new IllegalArgumentException();
+            throw new ListOfObjectsIsEmptyException();
 
         File csvOutputFile = new File(filePath);
 
@@ -51,7 +54,7 @@ public class CSVWriter {
                             try {
                                 return String.valueOf(field.get(obj));
                             } catch (IllegalAccessException e) {
-                                throw new RuntimeException(e);
+                                throw new IllegalFieldAccessException("Field " + field.getName() + " can't be accessed");
                             }
                         })
                         .collect(Collectors.joining(","));

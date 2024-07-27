@@ -38,31 +38,38 @@ public class CSVWriter {
 
         try (FileWriter pw = new FileWriter(csvOutputFile, !newable)) {
             // проверка добавления названия полей для перезаписи
-            if (newable) {
-                String header = Arrays.stream(fields)
-                        .map(Field::getName)
-                        .collect(Collectors.joining(","));
-                pw.write(header);
-                pw.write(System.lineSeparator());
-            }
-
+            writeFieldNamesToFile(fields, pw);
             // перебор объектов коллекции для вывода строки в файл
-            for (Object obj : objects) {
-                String line = Arrays.stream(fields)
-                        .peek(field -> field.setAccessible(true))
-                        .map(field -> {
-                            try {
-                                return String.valueOf(field.get(obj));
-                            } catch (IllegalAccessException e) {
-                                throw new IllegalFieldAccessException("Field " + field.getName() + " can't be accessed");
-                            }
-                        })
-                        .collect(Collectors.joining(","));
-                pw.write(line);
-                pw.write(System.lineSeparator());
-            }
+            writeEntitiesToFile(objects, fields, pw);
         } catch (IOException ex) {
             throw new FileNotFoundException();
+        }
+    }
+
+    private void writeEntitiesToFile(List<?> objects, Field[] fields, FileWriter pw) throws IOException {
+        for (Object obj : objects) {
+            String line = Arrays.stream(fields)
+                    .peek(field -> field.setAccessible(true))
+                    .map(field -> {
+                        try {
+                            return String.valueOf(field.get(obj));
+                        } catch (IllegalAccessException e) {
+                            throw new IllegalFieldAccessException("Field " + field.getName() + " can't be accessed");
+                        }
+                    })
+                    .collect(Collectors.joining(","));
+            pw.write(line);
+            pw.write(System.lineSeparator());
+        }
+    }
+
+    private void writeFieldNamesToFile(Field[] fields, FileWriter pw) throws IOException {
+        if (newable) {
+            String header = Arrays.stream(fields)
+                    .map(Field::getName)
+                    .collect(Collectors.joining(","));
+            pw.write(header);
+            pw.write(System.lineSeparator());
         }
     }
 }

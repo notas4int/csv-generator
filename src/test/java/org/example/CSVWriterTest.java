@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.models.Person;
+import org.example.services.CSVWriter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
